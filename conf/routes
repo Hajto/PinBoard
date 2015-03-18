@@ -3,9 +3,16 @@
 # ~~~~
 
 # Home page
-GET        /                    controllers.Application.index
-POST       /db/insert           controllers.PaperClipController.insert
-GET        /db/selectAll        controllers.PaperClipController.selectAll
+GET         /                          controllers.Application.index
+
+POST        /db/insertPaperClip        controllers.PaperClipController.insert
+GET         /db/selectAll              controllers.PaperClipController.selectAll
+POST        /db/deletePaperClip        controllers.PaperClipController.delete
+POST        /db/movePaperClip          controllers.PaperClipController.movePaperClip
+POST        /db/changeText             controllers.PaperClipController.changeText
+
+POST        /db/newPinBoard            controllers.PinBoardsController.addPinBoards
+POST        /db/searchForBoard         controllers.PinBoardsController.searchAndListBoards
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file        controllers.Assets.at(path="/public", file)
+GET         /assets/*file              controllers.Assets.at(path="/public", file)

@@ -5,6 +5,7 @@ object JsonFormats {
   import play.api.libs.json.Json
 
   implicit val paperClipFormat = Json.format[PaperClip]
+  implicit val pinBoardFormat = Json.format[PinBoard]
 }
 
 case class PaperClip
@@ -21,5 +22,5 @@ case class PaperClip
 case class PinBoard
 (
   name: String,
-  option: Option[Int]
+  id: Int
   )
