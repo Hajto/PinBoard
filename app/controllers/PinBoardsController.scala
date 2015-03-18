@@ -14,7 +14,7 @@ object PinBoardsController extends Controller {
   def addPinBoards = Action(parse.json){ implicit req =>
     req.body.validate[PinBoard].map{ pinBoard: PinBoard =>
       DB.withConnection{ conn =>
-        conn.prepareStatement("INSERT INTO PinBoards (Name) VALUES ('"++"')")
+        conn.prepareStatement("INSERT INTO PinBoards (Name) VALUES ('"+pinBoard.name+"')")
       }
     }
   }

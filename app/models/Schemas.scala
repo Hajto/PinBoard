@@ -20,6 +20,6 @@ case class PaperClip
 
 case class PinBoard
 (
-  Id: Int,
-  Name: String
+  name: String,
+  option: Option[Int]
   )
