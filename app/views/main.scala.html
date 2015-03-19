@@ -1,15 +1,4 @@
-@(title: String)(content: Html)
+@(message: Int)
 
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <script src="@routes.Assets.at("javascripts/hello.js")" type="text/javascript"></script>
-    </head>
-    <body>
-        @content
-    </body>
-</html>
+<h1>@message</h1>
+<a href="pinBoard.html">Thing</a>

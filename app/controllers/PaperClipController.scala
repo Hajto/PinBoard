@@ -55,7 +55,7 @@ object PaperClipController extends Controller {
   }
   
   def selectPinsForBoard(id:Int) = Action { implicit  req =>
-      Ok(Json.toJson(selectPinsFromDB("select * from PaperClips WHERE tid="+id)))
+      Ok(selectPinsFromDBAsJson(id))
   }
 
   def delete(id:Int) = Action { implicit req =>
@@ -129,5 +129,9 @@ object PaperClipController extends Controller {
 
     }
     list
+  }
+
+  def selectPinsFromDBAsJson(tid: Int) = {
+    Json.toJson(selectPinsFromDB("select * from PaperClips WHERE tid="+tid))
   }
 }

@@ -1,6 +1,3 @@
-var refference ={
-    serverAddress: "http://localhost:9000/"
-};
 //Targeting utils
 function getPaperClipById(targetId){
     for(var i=0; i < elemsList.length; i++){

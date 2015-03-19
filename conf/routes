@@ -4,7 +4,8 @@
 
 # Home page
 GET           /                              controllers.Application.index
-GET           /index.html                    controllers.Assets.at(path="/public", file="/index.html")
+GET           /index.html                    controllers.Assets.at(path="/public", file="/pinBoard.html")
+GET           /pinboard/:tid                 controllers.Application.showTable(tid: Int)
 
 POST          /db/insertPaperClip            controllers.PaperClipController.insert
 GET           /db/selectAll                  controllers.PaperClipController.selectAll
@@ -19,4 +20,4 @@ POST          /db/newPinBoard                controllers.PinBoardsController.add
 GET           /db/searchForBoard             controllers.PinBoardsController.searchAndListBoards
 
 # Map static resources from the /public folder to the /assets URL path
-GET          /*file                          controllers.Assets.at(path="/public", file)
+GET           /*file                         controllers.Assets.at(path="/public", file)
