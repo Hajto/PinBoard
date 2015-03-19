@@ -9,7 +9,7 @@ object JsonFormats {
 }
 
 case class PaperClip
-(
+( id: Int,
   tid: Int,
   text: String,
   width: Int,

@@ -20,17 +20,24 @@ object PaperClipController extends Controller {
     "posY" -> number,
     "posZ" -> number
   )(paperClipMove.apply)(paperClipMove.unapply))
-
-  case class paperClipDelete(id:Int)
-  val paperClipDeleteForm = Form(mapping (
+  
+  case class paperClipIdOnly(id:Int)
+  val paperClipIdOnlyForm = Form(mapping (
     "id" -> number
-  )(paperClipDelete.apply)(paperClipDelete.unapply))
+  )(paperClipIdOnly.apply)(paperClipIdOnly.unapply))
 
   case class paperClipChengeText(id:Int, text:String)
   val paperClipChangeTextForm = Form(mapping(
     "id" -> number,
     "text" -> text
   )(paperClipChengeText.apply)(paperClipChengeText.unapply))
+
+  case class paperClipReisze(id:Int, width: Int, height: Int)
+  val paperClipResizeForm = Form(mapping(
+    "id" -> number,
+    "width" -> number,
+    "height" -> number
+  )(paperClipReisze.apply)(paperClipReisze.unapply))
 
   def insert = Action(parse.json) { implicit req =>
     req.body.validate[PaperClip].map {
@@ -46,29 +53,19 @@ object PaperClipController extends Controller {
     }
   }
 
+  //Debug use only
   def selectAll = Action {
-    DB.withConnection { conn =>
-      val resultSet = conn.prepareStatement("select * from PaperClip").executeQuery()
-      var list = List[PaperClip]()
-
-      while (resultSet.next()) {
-        list ::= PaperClip(
-          resultSet.getInt("tid"),
-          resultSet.getString("text"),
-          resultSet.getInt("width"),
-          resultSet.getInt("width"),
-          resultSet.getInt("posX"),
-          resultSet.getInt("posY"),
-          resultSet.getInt("posZ")
-        )
-      }
-
-      Ok(Json.toJson(list))
-    }
+    Ok(Json.toJson(selectPinsFromDB("SELECT * FROM PaperClips")))
+  }
+  
+  def selectPinsForBoard = Action { implicit  req =>
+    paperClipIdOnlyForm.bindFromRequest().value.map{ form =>
+      Ok(Json.toJson(selectPinsFromDB("select * from PaperClips WHERE tid="+form.id)))
+    } getOrElse BadRequest("Insuficient Data")
   }
 
   def delete = Action { implicit req =>
-    val form = paperClipDeleteForm.bindFromRequest()
+    val form = paperClipIdOnlyForm.bindFromRequest()
     form.value.map{ form =>
       DB.withConnection{ conn =>
         conn.prepareStatement("DELETE FROM PinBoards where id=" +
@@ -103,8 +100,44 @@ object PaperClipController extends Controller {
           "' WHERE id = " +
           form.id +
           "").execute()
+        Ok("Ok")
+      }
+    } getOrElse BadRequest("Dane nie są poprawne")
+  }
+
+  def resize = Action { implicit req =>
+    paperClipResizeForm.bindFromRequest.value.map{ form =>
+      DB.withConnection{ conn =>
+        conn.prepareStatement("UPDATE PaperClips SET width=" +
+          form.width +
+          ", height=" +
+          form.height +
+          " WHERE id=" +
+          form.id).execute()
       }
     }
-    Ok("Ok")
+    Ok("It's probably working")
+  }
+
+  def selectPinsFromDB = { query : String =>
+    var list = List[PaperClip]()
+    DB.withConnection { conn =>
+      val resultSet = conn.prepareStatement(query).executeQuery()
+
+      while (resultSet.next()) {
+        list ::= PaperClip(
+          resultSet.getInt("id"),
+          resultSet.getInt("tid"),
+          resultSet.getString("text"),
+          resultSet.getInt("width"),
+          resultSet.getInt("width"),
+          resultSet.getInt("posX"),
+          resultSet.getInt("posY"),
+          resultSet.getInt("posZ")
+        )
+      }
+
+    }
+    list
   }
 }
