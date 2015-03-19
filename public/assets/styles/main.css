@@ -1,0 +1,30 @@
+/*Clear crap*/
+html,body{
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+/*ShadowyBox*/
+.shadowBox{
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 100%;
+    width:100%;
+    background-color: rgba(0,0,0,0.5);
+
+    z-index: 4 !important;
+}
+#editForm{
+    z-index: 5;
+    max-width: 75%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*CrapStyle*/
+div#addNote{
+    cursor: crosshair;
+}

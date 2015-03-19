@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> Lodowa </title>
+
+    <!--My Css-->
+    <link rel="stylesheet" type="text/css" href="assets/styles/main.css"/>
+
+    <!--Lib JS-->
+    <script src="libs/tinymce/tinymce.min.js"></script>
+
+    <!--My JS-->
+    <script src="js/utilities.js"></script>
+    <script src="js/network/ajaxAPI.js"></script>
+    <script src="js/model/PaperClip.js"></script>
+    <script>
+        //        Libs Init
+        tinymce.init({
+            selector: "textarea"
+        });
+
+        //My script beggining
+        var interfunctionalId = 0;
+        var relationalCoords = [];
+        var whichMove;
+        var elemsList = [];
+
+        var tid=4;
+        //Model
+
+        function init() {
+            document.addEventListener("mousedown", onMouseDown, false);
+            document.addEventListener("mouseup", onMouseUp, false);
+        }
+
+        var onMouseDown = function (event) {
+            console.log(event.target.classList);
+            if (event.target.classList[0] != "not") {
+                var paperX = event.clientX - parseInt(event.target.style.left);
+                var paperZ = event.clientY - parseInt(event.target.style.top);
+                console.log(paperX + " " + paperZ);
+                relationalCoords[0] = paperX;
+                relationalCoords[1] = paperZ;
+                magicHappens(event.target);
+
+                var percentageSizeX = parseInt(event.target.style.width) - 20;
+                var percentageSizeY = parseInt(event.target.style.height) - 20;
+                if (relationalCoords[0] < percentageSizeX && relationalCoords[1] < percentageSizeY) {
+                    event.target.addEventListener("mousemove", onMouseMove1, false);
+                    whichMove = 1
+                }
+                else {
+                    event.target.addEventListener("mousemove", onMouseMove2, false);
+                    whichMove = 2
+                }
+            }
+        };
+
+        var onMouseUp = function (event) {
+            if (whichMove == 1)
+                event.target.removeEventListener("mousemove", onMouseMove1);
+            else if (whichMove == 2)
+                event.target.removeEventListener("mousemove", onMouseMove2);
+            console.log("Mouse is going up..")
+        };
+
+        var onMouseMove1 = function (event) {
+            var trueTarget = document.getElementById(event.target.id);
+
+            trueTarget.style.left = (event.clientX - relationalCoords[0]) + "px";
+            trueTarget.style.top = (event.clientY - relationalCoords[1]) + "px";
+
+        };
+        var onMouseMove2 = function (event) {
+            var trueTarget = document.getElementById(event.target.id);
+
+            console.log(" Resize thing");
+            trueTarget.style.height = (event.clientY - parseInt(event.target.style.top)) + 25 + "px";
+            trueTarget.style.width = (event.clientX - parseInt(event.target.style.left)) + 25 + "px";
+        };
+
+        function magicHappens(element) {
+            for (var i = 0; i < elemsList.length; i++) {
+                if (elemsList[i] != 0 && document.getElementById(elemsList[i].id).style.zIndex != 1) {
+                    document.getElementById(elemsList[i].id).style.zIndex = 1;
+                }
+            }
+            element.style.zIndex = 2;
+        }
+    </script>
+</head>
+<body onload="init()">
+<div id="addNote" class="not"
+     style="position: absolute; top:0px; left: 0px; text-align: center; vertical-align: middle;height: 50px; width: 50px; background: black; color:#ff1906; font-size:xx-large"
+     onclick="new _paperClips()">+
+</div>
+
+<div id="mainShadowBox" class="shadowBox" style="display: none;">
+    <form method="post" id="editForm">
+        <textarea name="content"></textarea>
+    </form>
+    <input type="button" id="mainShadowBoxButton" onclick="writeChanges(this)" value="WriteChanges">
+</div>
+
+</body>
+</html>

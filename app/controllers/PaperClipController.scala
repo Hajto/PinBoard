@@ -20,24 +20,20 @@ object PaperClipController extends Controller {
     "posY" -> number,
     "posZ" -> number
   )(paperClipMove.apply)(paperClipMove.unapply))
-  
-  case class paperClipIdOnly(id:Int)
-  val paperClipIdOnlyForm = Form(mapping (
-    "id" -> number
-  )(paperClipIdOnly.apply)(paperClipIdOnly.unapply))
 
-  case class paperClipChengeText(id:Int, text:String)
+  case class paperClipChangeText(id: Int, text: String)
+
   val paperClipChangeTextForm = Form(mapping(
     "id" -> number,
     "text" -> text
-  )(paperClipChengeText.apply)(paperClipChengeText.unapply))
+  )(paperClipChangeText.apply)(paperClipChangeText.unapply))
 
-  case class paperClipReisze(id:Int, width: Int, height: Int)
+  case class paperClipResize(id:Int, width: Int, height: Int)
   val paperClipResizeForm = Form(mapping(
     "id" -> number,
     "width" -> number,
     "height" -> number
-  )(paperClipReisze.apply)(paperClipReisze.unapply))
+  )(paperClipResize.apply)(paperClipResize.unapply))
 
   def insert = Action(parse.json) { implicit req =>
     req.body.validate[PaperClip].map {
@@ -58,21 +54,15 @@ object PaperClipController extends Controller {
     Ok(Json.toJson(selectPinsFromDB("SELECT * FROM PaperClips")))
   }
   
-  def selectPinsForBoard = Action { implicit  req =>
-    paperClipIdOnlyForm.bindFromRequest().value.map{ form =>
-      Ok(Json.toJson(selectPinsFromDB("select * from PaperClips WHERE tid="+form.id)))
-    } getOrElse BadRequest("Insuficient Data")
+  def selectPinsForBoard(id:Int) = Action { implicit  req =>
+      Ok(Json.toJson(selectPinsFromDB("select * from PaperClips WHERE tid="+id)))
   }
 
-  def delete = Action { implicit req =>
-    val form = paperClipIdOnlyForm.bindFromRequest()
-    form.value.map{ form =>
+  def delete(id:Int) = Action { implicit req =>
       DB.withConnection{ conn =>
-        conn.prepareStatement("DELETE FROM PinBoards where id=" +
-          form.id).execute()
+        conn.prepareStatement("DELETE FROM PaperClips where id=" + id).execute()
       }
-      Ok("Rekordy pomyślnie usinięto")
-    } getOrElse BadRequest("Dane nie są poprawne")
+      Ok("DELETE FROM PinBoards where id=" + id)
   }
 
   def movePaperClip = Action{ implicit req =>
@@ -126,7 +116,7 @@ object PaperClipController extends Controller {
 
       while (resultSet.next()) {
         list ::= PaperClip(
-          resultSet.getInt("id"),
+          Some[Int](resultSet.getInt("id")),
           resultSet.getInt("tid"),
           resultSet.getString("text"),
           resultSet.getInt("width"),
