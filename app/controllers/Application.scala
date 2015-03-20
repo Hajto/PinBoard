@@ -14,8 +14,8 @@ object Application extends Controller {
     Ok(views.html.test(2))
   }
 
-  def showTable(tid: Int) = Action {
-    Ok(views.html.pinBoard(tid, Json.toJson(PaperClipController.selectPinsFromDBAsJson(tid)).toString()))
+  def showTable(tid: Int) = Action { req =>
+    Ok(views.html.pinBoard(tid, Json.toJson(PaperClipController.selectPinsFromDBAsJson(tid)).toString(),req.host))
   }
 
 }

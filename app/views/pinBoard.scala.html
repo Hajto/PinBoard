@@ -1,4 +1,4 @@
-@(tid: Int, paperClips: String)
+@(tid: Int, paperClips: String, host:String)
 
 <!DOCTYPE html>
 <html>
@@ -7,7 +7,7 @@
         <title> Lodowa </title>
 
             <!--My Css-->
-        <link rel="stylesheet" type="text/css" href="assets/styles/main.css"/>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("assets/styles/main.css")"/>
 
             <!--Lib JS-->
         <script src="@routes.Assets.at("libs/tinymce/tinymce.min.js")"></script>
@@ -29,13 +29,12 @@
         var whichMove ;
         var elemsList =[ ] ;
 
-
-        var tid = @tid.toInt ;
+        var tid = @tid.toInt
 
 
         var refference = {
-        serverAddress : "http://localhost:9000/"
-        } ;
+          serverAddress : "http://@host/"
+        }
         </script>
     </head>
     <body onload="init ( )">
