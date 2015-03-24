@@ -11,7 +11,7 @@ import play.api.libs.json.Json.JsValueWrapper
 object Application extends Controller {
 
   def index = Action {
-    Ok(views.html.test(2))
+    Ok("TEST")
   }
 
   def showTable(tid: Int) = Action { req =>
