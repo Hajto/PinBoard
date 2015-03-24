@@ -31,7 +31,6 @@
 
         var tid = @tid.toInt
 
-
         var refference = {
           serverAddress : "http://@host/"
         }
@@ -46,6 +45,8 @@
             </form>
             <input type="button" id="mainShadowBoxButton" onclick="writeChanges ( this )" value="WriteChanges">
         </div>
-        @paperClips
     </body>
+    <div style="display: none;" id="dataHolder">
+        @paperClips
+    </div>
 </html>

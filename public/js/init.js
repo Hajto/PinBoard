@@ -1,6 +1,8 @@
 function init() {
     document.addEventListener("mousedown", onMouseDown, false);
     document.addEventListener("mouseup", onMouseUp, false);
+
+    synqWithServer(JSON.parse(document.getElementById("dataHolder").innerHTML))
 }
 
 var onMouseDown = function (event) {
