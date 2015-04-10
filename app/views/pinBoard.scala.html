@@ -1,4 +1,4 @@
-@(tid: Int, paperClips: String, host:String)
+@(tid: String, paperClips: Html, host:String)
 
 <!DOCTYPE html>
 <html>
@@ -29,8 +29,6 @@
         var whichMove ;
         var elemsList =[ ] ;
 
-        var tid = @tid.toInt
-
         var refference = {
           serverAddress : "http://@host/"
         }
@@ -41,7 +39,9 @@
 
         <div id="mainShadowBox" class="shadowBox" style="display : none ;">
             <form method="post" id="editForm">
-                <textarea name="content"></textarea>
+                <label>
+                    <textarea name="content"></textarea>
+                </label>
             </form>
             <input type="button" id="mainShadowBoxButton" onclick="writeChanges ( this )" value="WriteChanges">
         </div>

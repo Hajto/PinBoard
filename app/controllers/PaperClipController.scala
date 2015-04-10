@@ -49,15 +49,11 @@ object PaperClipController extends Controller {
     }
   }
 
-  //Debug use only
+  //Debug use only, do not use normally
   def selectAll = Action {
     Ok(Json.toJson(selectPinsFromDB("SELECT * FROM PaperClips")))
   }
   
-  def selectPinsForBoard(id:Int) = Action { implicit  req =>
-      Ok(selectPinsFromDBAsJson(id))
-  }
-
   def delete(id:Int) = Action { implicit req =>
       DB.withConnection{ conn =>
         conn.prepareStatement("DELETE FROM PaperClips where id=" + id).execute()
@@ -116,7 +112,7 @@ object PaperClipController extends Controller {
 
       while (resultSet.next()) {
         list ::= PaperClip(
-          Some[Int](resultSet.getInt("id")),
+          Some[Int](resultSet.getInt(1)),
           resultSet.getInt("tid"),
           resultSet.getString("text"),
           resultSet.getInt("width"),
@@ -126,12 +122,13 @@ object PaperClipController extends Controller {
           resultSet.getInt("posZ")
         )
       }
-
     }
+    print(list)
     list
   }
 
-  def selectPinsFromDBAsJson(tid: Int) = {
-    Json.toJson(selectPinsFromDB("select * from PaperClips WHERE tid="+tid))
+  def selectPinsFromDBAsJson(tName: String) = {
+    print("select * from PaperClips INNER JOIN PinBoards on PaperClips.tid=PinBoards.id WHERE name="+tName)
+    Json.toJson(selectPinsFromDB("select * from PaperClips INNER JOIN PinBoards on PaperClips.tid=PinBoards.id WHERE name='"+tName+"'"))
   }
 }

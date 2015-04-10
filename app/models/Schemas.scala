@@ -1,5 +1,7 @@
 package models
 
+import play.twirl.api.Html
+
 object JsonFormats {
 
   import play.api.libs.json.Json
@@ -17,7 +19,7 @@ case class PaperClip
   posX: Int,
   posY: Int,
   posZ: Int
-  )
+)
 
 case class PinBoard
 (

@@ -7,15 +7,20 @@ import play.api.mvc._
 import models.JsonFormats._
 import play.api.libs.json.{JsArray, Json, JsObject}
 import play.api.libs.json.Json.JsValueWrapper
+import play.twirl.api.Html
 
 object Application extends Controller {
 
   def index = Action {
-    Ok("TEST")
+    Ok(views.html.choose())
   }
 
-  def showTable(tid: Int) = Action { req =>
-    Ok(views.html.pinBoard(tid, Json.toJson(PaperClipController.selectPinsFromDBAsJson(tid)).toString(),req.host))
+  def showTable(tName: String) = Action { req =>
+
+    if (tName != "")
+      Ok(views.html.pinBoard(tName, Html(Json.toJson(PaperClipController.selectPinsFromDBAsJson(tName)).toString()), req.host))
+    else
+      Ok("Zaraz ci tom strone zrobie")
   }
 
 }

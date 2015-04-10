@@ -3,11 +3,11 @@ function _paperClips(id, text, width, height, posX, posY, posZ) {
 
     this.id = 0;
 
-    if(width == undefined ||
+    if (width == undefined ||
         height == undefined ||
         posX == undefined ||
         posY == undefined ||
-        posZ == undefined){
+        posZ == undefined) {
 
         this.width = 200;
         this.height = 200;
@@ -32,7 +32,7 @@ function _paperClips(id, text, width, height, posX, posY, posZ) {
     this.createAndInit = function () {
         var thing = this;
 
-        if(this.id == 0){
+        if (this.id == 0) {
             ajaxAPI(new _haitoRequest(refference.serverAddress + "db/insertPaperClip",
                     "POST",
                     JSON.stringify({
@@ -56,11 +56,10 @@ function _paperClips(id, text, width, height, posX, posY, posZ) {
             );
         } else {
             appendToBody();
-            alert("Coś!")
+            //alert("Coś!")
         }
 
-        function appendToBody(){
-            alert( "dodaje");
+        function appendToBody() {
             var paperClip = document.createElement("div");
             paperClip.style.width = thing.width + "px";
             paperClip.style.height = thing.height + "px";
@@ -72,6 +71,8 @@ function _paperClips(id, text, width, height, posX, posY, posZ) {
             paperClip.style.backgroundColor = "#C0C0C0";
             paperClip.id = thing.id.toString();
             paperClip.innerHTML = thing.insideText;
+
+            paperClip.appendChild(generateEditButton(thing.id));
 
             console.log(paperClip);
             document.body.appendChild(paperClip);
@@ -135,6 +136,7 @@ function _paperClips(id, text, width, height, posX, posY, posZ) {
     };
     this.getMovePacket = function () {
         return {
+            id: this.id,
             pozX: this.posX,
             posY: this.posY,
             posZ: this.posZ
@@ -166,7 +168,7 @@ function _paperClips(id, text, width, height, posX, posY, posZ) {
 
 function synqWithServer(data) {
 
-    for(var i=0; i < data.length; i++){
+    for (var i = 0; i < data.length; i++) {
         appendNewClip(data[i])
     }
 
@@ -180,4 +182,30 @@ function synqWithServer(data) {
             descriptiveObject.posZ
         );
     }
+}
+
+function generateEditButton(id) {
+    var editButton = document.createElement("button");
+    editButton.innerHTML = "Edytuj";
+    editButton.setAttribute("cId", id);
+    editButton.addEventListener("click", function (event) {
+        var thing = event.target;
+        console.log(thing.getAttribute("cId"));
+        console.log(findPaperClipById(thing.getAttribute("cId")));
+        findPaperClipById(thing.getAttribute("cId")).setMeInMCEAndShowIt();
+
+
+    }, false);
+
+    editButton.style.position = "absolute";
+    editButton.style.top = "0px";
+    editButton.style.left = "0px";
+
+    return editButton;
+}
+
+function findPaperClipById(id){
+    for(var i = 0; i < elemsList.length; i++)
+        if(elemsList[i].id == id)
+            return elemsList[i]
 }

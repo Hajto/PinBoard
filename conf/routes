@@ -5,11 +5,10 @@
 # Home page
 GET           /                              controllers.Application.index
 GET           /index.html                    controllers.Assets.at(path="/public", file="/pinBoard.html")
-GET           /pinboard/:tid                 controllers.Application.showTable(tid: Int)
+GET           /pinboard/:tName               controllers.Application.showTable(tName: String)
 
 POST          /db/insertPaperClip            controllers.PaperClipController.insert
 GET           /db/selectAll                  controllers.PaperClipController.selectAll
-GET           /db/selectPins/:id             controllers.PaperClipController.selectPinsForBoard(id: Int)
 
 DELETE        /db/deletePaperClip/:id        controllers.PaperClipController.delete(id:Int)
 POST          /db/movePaperClip              controllers.PaperClipController.movePaperClip
